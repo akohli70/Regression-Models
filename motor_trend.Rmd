@@ -150,4 +150,4 @@ plot(model4)
 ```  
 
 
-<td>[GitHub Repo](https://github.com/akohli70/Statistical-Inference/blob/master/Part%202%20ToothGrowth.Rmd)</td>
+<td>[GitHub Repo](https://github.com/akohli70/Regression-Models/blob/master/motor_trend.Rmd)</td>
