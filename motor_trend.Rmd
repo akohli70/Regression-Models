@@ -41,7 +41,7 @@ result$p.value
 result$estimate
 ```  
   
-**Regression Analysis** The report runs severals models to understand relationship between different variables, starting with the full model below. As the p-value is much less than 0.05, we reject the null hypothesis. Hence there is a significant relationship between the variables in the linear regression model of the dataset faithful. Results of __Model 1__:
+**Regression Analysis** The report runs several models to understand relationship between different variables, starting with the full model below. As the p-value is much less than 0.05, we reject the null hypothesis. Hence there is a significant relationship between the variables in the linear regression model of the dataset faithful. Results of __Model 1__:
 ```{r, echo=FALSE}
 model1 <- lm(mpg ~ ., data=mtcars)
 summary(model1)$call
