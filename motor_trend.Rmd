@@ -4,7 +4,7 @@ author: "Amit Kohli"
 date: "February 15, 2016"
 output: pdf_document
 fontsize: 10pt
-geometry: margin=.5in
+geometry: margin=.75in
 ---
 
 ```{r prepare_environment, echo=FALSE, include=FALSE}
@@ -24,7 +24,7 @@ attach(mtcars)
 opts_chunk$set(results = 'hold',fig.path = 'figure/')
 ```
   
-**Executive Summary**  This report analyzes mtcars dataset to explore if an automatic or manual transmission is better for cars in terms of miles per gallon (mpg) and quantifying the difference between both types of transmissions. The reports uncovers a strong relationship between vehicle weight and transmission type, but there is still a statistically significant increase in the mean value of gas mileage attributable to manual transmissions -- *between 0.05 and 5.8 mpg.*
+**Executive Summary**  This report analyzes mtcars dataset to explore if an automatic or manual transmission is better for cars in terms of miles per gallon (MPG) and quantifying the difference between both types of transmissions. The reports uncovers a strong relationship between vehicle weight and transmission type, but there is still a statistically significant increase in the mean value of gas mileage attributable to manual transmissions -- *between 0.05 and 5.8 mpg.*
 
 **Exploratory Data Analysis** Dataset has 32 observations on 11 variables.  
 ```{r, echo=FALSE}
@@ -32,7 +32,7 @@ dim(mtcars)
 head(mtcars)
 tail(mtcars)
 ```   
-By checking correlations, weight variable affects the fuel economy the most - and by plotting mpg and weight against transmission types (*Figures 1 & 2*) -- the report reveals that weight difference for transmissions is stronger than mpg difference.  
+By checking correlations, weight variable affects the fuel economy the most - and by plotting MPG and weight against transmission types (*Figures 1 & 2*) -- the report reveals that weight difference for transmissions is stronger than MPG difference.  
 
 **Inference** The report makes the null hypothesis as the MPG of the automatic and manual transmissions are from the same population by utilizing the the two sample T-test function. Since the p-value is 0.00137, we reject our null hypothesis. So, the automatic and manual transmissions are from different populations. And the mean for MPG of manual transmitted cars is about 7 more than that of automatic transmitted cars.
 ```{r, echo=FALSE}
@@ -41,7 +41,7 @@ result$p.value
 result$estimate
 ```  
   
-**Regression Analysis** The report runs several models to understand relationship between different variables, starting with the full model below. As the p-value is much less than 0.05, we reject the null hypothesis. Hence there is a significant relationship between the variables in the linear regression model of the dataset faithful. Results of __Model 1__:
+**Linear Regression Analysis** The report runs several models to understand relationship between different variables, starting with the model below. As the p-value is much less than 0.05, we reject the null hypothesis. Hence there is a significant relationship between the variables in the linear regression model of the dataset faithful. Results of __Model 1__:
 ```{r, echo=FALSE}
 model1 <- lm(mpg ~ ., data=mtcars)
 summary(model1)$call
@@ -69,11 +69,10 @@ attributes(model2.pvalue)<-NULL
 paste("p-value: ",model2.pvalue)
 ```  
 
-Next, the report fits the simple model with MPG as the outcome variable and Transmission as the predictor variable. It shows that on average, a car has 17.147 mpg with automatic transmission, and if it is manual transmission, 7.245 mpg is increased. Results of __Model 3__:
+Next, the report fits the simple model with MPG as the outcome variable and Transmission as the predictor variable. It shows that on average, a car has 17.147 MPG with automatic transmission, and if it is manual transmission, 7.245 MPG is increased. Results of __Model 3__:
 ```{r, echo=FALSE}
 model3<-lm(mpg ~ am, data=mtcars)
 summary(model3)$call
-#summary(model3)$coef
 paste("Residual Standard Error: ",summary(model3)$sigma)
 paste("Degrees of Freedom: ",summary(model3)$df[2])
 paste("Adjusted R-squared: ",summary(model3)$adj.r.squared, " (model can explain 34% of the variance of the MPG variable)")
@@ -83,25 +82,18 @@ attributes(model3.pvalue)<-NULL
 paste("p-value: ",model3.pvalue)
 ```  
 
-Lastly, according to the scatter plot (*Figure 3*), it indicates that there appears to be an interaction between "wt" and "am" variables, since automatic cars tend to weigh heavier than manual cars. Results of __Model 4__:
+Lastly, according to the scatter plot (*Figure 3*), it indicates that there appears to be an interaction between "wt" and "am" variables, since automatic cars tend to weigh heavier than manual cars. *Figure 3(a)* proves general intuition that smaller engine automobiles give better mileage than bigger engines.  Results of __Model 4__:
 ```{r, echo=FALSE}
 model4<-lm(mpg ~ wt + qsec + am + wt:am, data=mtcars)
 summary(model4)
-#summary(model4)$call
-#paste("Residual Standard Error: ",summary(model4)$sigma)
-#paste("Degrees of Freedom: ",summary(model4)$df[2])
-#paste("Adjusted R-squared: ",summary(model4)$adj.r.squared, " (model can explain 88% of the variance of the MPG variable)")
-#model4.pvalue<-summary(model4)$fstatistic
-#model4.pvalue<-pf(model4.pvalue[1],model4.pvalue[2],model4.pvalue[3],lower.tail=F)
-#attributes(model4.pvalue)<-NULL
-#paste("p-value: ",model4.pvalue)
 ```  
-The report selects the final model (*Model 4*) with the highest Adjusted R-squared value (88%), "mpg ~ wt + qsec + am + wt:am".  Model 4 results show that when "wt" (weight lb/1000) and "qsec" (1/4 mile time) remain constant, cars with manual transmission add 14.079 + (-4.141)*wt more MPG (miles per gallon) on average than cars with automatic transmission. That is, a manual transmitted car that weighs 2000 lbs have 5.797 more MPG than an automatic transmitted car that has both the same weight and 1/4 mile time.
+
+The report selects the final model (*Model 4*) with the highest Adjusted R-squared value (88%), "mpg ~ wt + qsec + am + wt:am".  Model 4 proves that when "wt" (weight lb/1000) and "qsec" (1/4 mile time) remain constant, cars with manual transmission add 14.079 more MPG on average than cars with automatic transmission. That is, a manual transmission car that weighs 2000 lbs have 5.797 more MPG than an automatic transmission car that has both the same wt and qsec.
 ```{r, echo=FALSE}
 #summary(model4)$coef
 ```  
 
-**Residual Analysis and Diagnostics** According to the residual plots (*Figure 4*), we can verify the following underlying assumptions:  
+**Residual Analysis** According to the residual plots (*Figure 4*), we can verify the following underlying assumptions:  
 1. The Residuals vs. Fitted plot shows no consistent pattern, supporting the accuracy of the independence assumption.  
 2. The Normal Q-Q plot indicates that the residuals are normally distributed because the points lie closely to the line.  
 3. The Scale-Location plot confirms the constant variance assumption, as the points are randomly distributed.  
@@ -120,9 +112,9 @@ Appendix
 ## Figure 1 - Boxplot of MPG vs. Transmission  
 ```{r, echo=FALSE}
 par(mfrow = c(1, 2))
-transFactor <- factor(mtcars$am, levels=0:1, labels=c("Automatic", "Manual"))
-plot(transFactor, mtcars$mpg, xlab="Transmission Type", ylab="MPG",col="green")
-plot(transFactor, mtcars$wt, xlab="Transmission Type", ylab="Weight (1000lb)",col="blue")
+transmission <- factor(mtcars$am, levels=0:1, labels=c("Automatic", "Manual"))
+plot(transmission, mtcars$mpg, xlab="Transmission Type", ylab="MPG",col="green")
+plot(transmission, mtcars$wt, xlab="Transmission Type", ylab="Weight (1000lb)",col="blue")
 ```  
 
 ## Figure 2 - Pair Graph of Motor Trend Dataset 
@@ -137,10 +129,10 @@ scale_color_discrete(labels=c("Automatic", "Manual")) +
 xlab("weight")
 ```
 
-## Figure 3(a) - Scatter Plot of MPG vs. Cylinder
-```{r, echo=FALSE}
-ggplot(mtcars, aes(x=cyl, y=mpg, group=cyl, color=cyl, height=3, width=3)) + geom_point() + scale_color_discrete(labels=c("4", "6","8")) + 
-xlab("Cylinder")
+## Figure 3(a) - Box Plot of Cylinder vs. MPG
+```{r, echo=FALSE, fig.height=5}
+cylinder <- factor(mtcars$cyl,  labels=c("4", "6","8"))
+plot(cylinder, mtcars$mpg, xlab="Cylinder", ylab="MPG",col="cyan")
 ```  
 
 ## Figure 4 - Residual Plots
